@@ -19,13 +19,15 @@ export class UserService {
   
   constructor(public http:HttpClient) { }
 
-  fetchClass() {
-    this.http.get<ClassGroup>(environment.url + 'class').subscribe(
-      (data) => {
-        this.currentClass = data;
-      },
-      (error) => console.log(error)
-    );
+  fetchClass(profID:number) {
+         const options = profID
+           ? {
+               params: new HttpParams()
+                 .set('profID', profID)
+             }
+           : {};
+
+   return this.http.get<ClassGroup>(environment.url + 'getClass',options);
   }
 
   getClass() {
