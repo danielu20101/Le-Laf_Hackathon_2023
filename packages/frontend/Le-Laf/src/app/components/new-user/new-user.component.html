@@ -1,0 +1,23 @@
+<div class="registerCard">
+    <div class="registerElements">
+        <h1>Register</h1>
+        <span class="p-float-label">
+            <input pInputText id="user" [(ngModel)]="email" />
+            <label htmlFor="user">Email</label>
+        </span>
+        <span class="p-float-label">
+            <input pInputText id="pass" [(ngModel)]="password" />
+            <label htmlFor="pass">Password</label>
+        </span>
+
+    <span class="p-float-label">
+        <p-dropdown [options]="roles" [(ngModel)]="selectedRole" placeholder="Select a Role" optionLabel="name"
+            inputId="float-label"></p-dropdown>
+        <label for="float-label">Select a Role</label>
+    </span>
+        <div class="registerButtons">
+            <p-button label="Back" (click)="back()"></p-button>
+            <p-button label="Finish" (click)="login()"></p-button>
+        </div>
+    </div>
+</div>

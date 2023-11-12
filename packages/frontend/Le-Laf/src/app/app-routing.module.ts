@@ -5,6 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ClassComponent } from './components/class/class.component';
 import { AcceptComponent } from './components/accept/accept.component';
 import { RequestComponent } from './components/request/request.component';
+import { NewUserComponent } from './components/new-user/new-user.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'class', component: ClassComponent },
   { path: 'accept', component: AcceptComponent },
   { path: 'request', component: RequestComponent },
+  { path:'register', component: NewUserComponent}
 ];
 
 @NgModule({

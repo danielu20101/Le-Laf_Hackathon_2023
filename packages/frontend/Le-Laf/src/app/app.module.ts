@@ -18,14 +18,20 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { RegisterComponent } from './components/register/register.component';
 import { DialogModule } from 'primeng/dialog';
-
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
+import { NewUserComponent } from './components/new-user/new-user.component';
+import { DropdownModule } from 'primeng/dropdown';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, LoginComponent, ClassComponent, RequestComponent, AcceptComponent, MenuComponent, RegisterComponent],
+  declarations: [AppComponent, HomeComponent, LoginComponent, ClassComponent, RequestComponent, AcceptComponent, MenuComponent, RegisterComponent, NewUserComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
@@ -34,7 +40,9 @@ import { DialogModule } from 'primeng/dialog';
     ButtonModule,
     CardModule,
     TableModule,
-    DialogModule
+    DialogModule,
+    InputTextModule,
+    DropdownModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

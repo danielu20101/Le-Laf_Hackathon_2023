@@ -1,19 +1,19 @@
-.loginCard {
+.registerCard {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-content: center;
     height: 100vh;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.loginElements {
+.registerElements {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 26px;
+    gap: 28px;
 }
 
-.loginButtons {
+.registerButtons {
     display: flex;
     justify-content: space-between;
     width: 100%;
