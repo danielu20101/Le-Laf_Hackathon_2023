@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Depends, Request, HTTPException
-
+from pymysql.cursors import DictCursor
 from passlib.context import CryptContext
 import uuid #to generate random userID's
 
 from db_rds import ENDPOINT, PORT, USER, PASSWORD, DBNAME
-from models import RegisterUserRequest, GetUserRequest #import pydantic models for routes
+from models import RegisterUserRequest, RequestEvent #import pydantic models for routes
 
 import pymysql
 
@@ -100,3 +100,53 @@ async def getUser(email, password):
 #    return False
 
 #conn = databaseCOnnection
+
+def authenticate_user(email, password):
+    with get_db_connection() as conn:
+        with conn.cursor(DictCursor) as cur:  
+            sql_statement = "SELECT userid, email, pass, role FROM user WHERE email = %s"
+            cur.execute(sql_statement, (email,))
+            user_record = cur.fetchone()
+
+            if user_record and pwd_context.verify(password, user_record['pass']):
+                return {
+                    "userid": user_record['userid'],
+                    "email": user_record['email'],
+                    "role": user_record['role']
+                }
+            else:
+                return None
+
+@app.post("/requestEvent")
+async def request_event(request_event: RequestEvent):
+    user = authenticate_user(request_event.email, request_event.password) #method to determine correct user
+    if not user:
+        raise HTTPException(status_code=405, detail="user does not exist")
+
+    if user['role'] != 2:
+        raise HTTPException(status_code=404, detail="person is not the right role")
+
+    class_id = 2 #HARD CODED for now
+
+    if not class_id:
+        raise HTTPException(status_code=404, detail="Class not found for this admin")
+
+    new_calendar_event = {
+        "classID": class_id,
+        "hsAdminID": user['userid'],
+        "Day": request_event.day,
+        "Month": request_event.month,
+        "Year": request_event.year
+    }
+
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                sql_request_statement = """INSERT INTO EventRequest (classID, hsAdminID, Day, Month, Year)
+                                           VALUES (%(classID)s, %(hsAdminID)s, %(Day)s, %(Month)s, %(Year)s)"""
+                cur.execute(sql_request_statement, new_calendar_event)
+                conn.commit()
+        return {"message": "Event requested successfully"}
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
