@@ -1,0 +1,39 @@
+
+<div style="display: flex; justify-content: space-between; margin-top: 10px;">
+    <div style="width: 49%;">
+        <p-card header="Class Time">
+            {{classTime}}
+        </p-card>
+    </div>
+    <div style="width: 49%;">
+        <p-card header="Class Day" >
+            {{classDay}}
+        </p-card>
+    </div>
+</div>
+
+<p-card header="Members">
+    <p-table [value]="members">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Member Id</th>
+                <th>Member Name</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-member>
+            <tr>
+                <td>{{ member.id }}</td>
+                <td>{{ member.name }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <div style="margin-top: 10px;">
+        <p-button label="Add User" (onClick)="showRegister()"></p-button>
+    </div>
+</p-card>
+
+
+<p-dialog header="Register New User" [(visible)]="showing_register" [modal]="true" [style]="{ width: '65vw' }" [draggable]="false"
+    [resizable]="false">
+ <app-register></app-register>
+</p-dialog>
