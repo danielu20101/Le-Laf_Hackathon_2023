@@ -31,6 +31,7 @@ def get_db_connection():
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 minPasswordLen = 8 #minimum password length
+
 @app.post("/registerUser")
 async def register_user(register_request: RegisterUserRequest):
     if len(register_request.password) < minPasswordLen:
@@ -88,6 +89,7 @@ async def getUser(email, password):
         raise HTTPException(status_code=500, detail=str(e))
 
     return {"userID": userID, "role": role}
+
 
 #@app.post("/loginHSAdmin")
 #async def loginHSAdmin():
