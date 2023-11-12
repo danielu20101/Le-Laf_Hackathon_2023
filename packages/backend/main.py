@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, Request, HTTPException
 from pymysql.cursors import DictCursor
 from passlib.context import CryptContext
 import uuid #to generate random userID's
-
+from datetime import datetime, timedelta
 from db_rds import ENDPOINT, PORT, USER, PASSWORD, DBNAME
 from models import RegisterUserRequest, RequestEvent #import pydantic models for routes
 
@@ -150,3 +150,37 @@ async def request_event(request_event: RequestEvent):
     except Exception as e:
         conn.rollback()
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/get_all_classes")
+async def get_all_classes(day_code: int):
+    if day_code not in range(5):
+        raise HTTPException(status_code=400, detail="Invalid DayCode supplied")
+
+    today = datetime.today()
+    first_day_next_month = (today.replace(day=1) + timedelta(days=31)).replace(day=1)
+    
+    first_weekday = first_day_next_month.weekday()
+
+    day_difference = (day_code - first_weekday) % 7
+    first_class_day = first_day_next_month + timedelta(days=day_difference)
+
+    class_dates = []
+    while first_class_day.month == first_day_next_month.month:
+        class_dates.append(first_class_day)
+        first_class_day += timedelta(days=7)
+
+    classes_list = []
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor(DictCursor) as cur:
+                for class_date in class_dates:
+                    sql_statement = """SELECT * FROM class 
+                                       WHERE DayCode = %s""" 
+                    cur.execute(sql_statement, (day_code,))
+                    classes = cur.fetchall()
+                    classes_list.extend(classes)
+        return classes_list
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
