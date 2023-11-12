@@ -15,6 +15,5 @@ Approach: We developed a platform allowing local Bethlehem High School admins to
 
 DatabaseERD:
 <img width="567" alt="Screen Shot 2023-11-12 at 10 27 18 AM" src="https://github.com/danielu20101/Le-Laf_Hackathon_2023/assets/62815005/1f4122a0-4988-4e14-aadd-d9584ac0a9ea">
-![IMG_1204HACKATHON](https://github.com/danielu20101/Le-Laf_Hackathon_2023/assets/62815005/33ebba7a-e702-404a-88c8-e74056e123db)
 
 Tech Stack: Fast API, Angular.js, Typescript, Javascript
