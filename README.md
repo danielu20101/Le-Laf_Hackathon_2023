@@ -11,7 +11,7 @@
 
 ## Purpose
 
-Multiple high schools in the Bethlehem community suffer from low graduation rates. Put simply, more students than in the average high school in Bethlehem school district tend to lose interest in their academic pursuits. Through Lehigh Valley's Association of Independent Colleges, students can participate in community events with industry experts that can improve teaching skills, expand knowledge in specific disciplines, or teach about how to take on a leadership role. How can we raise student awareness for these school districts, and fortify LVAIC to serve as an even more powerful and engaging platform?
+In the Bethlehem school district, multiple high schools are experiencing lower graduation rates, with students frequently losing interest in their academic pursuits. Through Lehigh Valley's Association of Independent Colleges, students can participate in community events with industry experts that can improve teaching skills, expand knowledge in specific disciplines, or teach about how to take on a leadership role. How can we raise student awareness for these school districts, and fortify LVAIC to serve as an even more powerful and engaging platform?
 
 ## Approach
 
