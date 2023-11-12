@@ -68,7 +68,7 @@ export class UserService {
 
   registerUser(email:string, password:string, roleID:number){
     return this.http
-      .post(environment.url + 'user', {
+      .post(environment.url + 'registerUser', {
         'email': email,
         'password': password,
         'role': roleID,

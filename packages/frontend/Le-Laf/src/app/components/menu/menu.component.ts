@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DEFAULTUSER } from 'src/app/models/user.model';
 import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -22,7 +23,12 @@ export class MenuComponent implements OnInit{
   constructor(public router:Router, public modalService:ModalService, public userService:UserService) {}
 
   ngOnInit(): void {
-     const roleID =  this.userService.getCurrentUser().roleID
+    var curr_user = this.userService.getCurrentUser()
+    if (curr_user==DEFAULTUSER){
+      this.router.navigate([''])
+    }
+     const roleID =  curr_user.role
+
      if(roleID==0)
       return
      else if (roleID==1){

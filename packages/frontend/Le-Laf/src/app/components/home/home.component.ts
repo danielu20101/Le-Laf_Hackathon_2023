@@ -20,7 +20,8 @@ export class HomeComponent implements OnInit {
   ];
   refresh = new Subject<void>();
   activeDayIsOpen = false;
-
+  showModal = false;
+  modalData:{'title':string,'start':Date} = {'title':'',start:this.viewDate};
   constructor(public eventService:EventService) {}
 
   ngOnInit(): void {
@@ -44,7 +45,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    console.log('action', action)
-    console.log(event)
+    this.modalData = {'title':event.title,'start':event.start}
+    this.showModal = true;
   }
 }

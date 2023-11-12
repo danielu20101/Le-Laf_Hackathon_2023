@@ -18,14 +18,11 @@ constructor(public router:Router,public modalService:ModalService,public userSer
 
 login(){
   this.userService.setCurrentUser(this.email,this.password).subscribe((data)=>{
+    this.userService.currentUser = data
     this.modalService.logIn();
     this.router.navigate(['/home']);
   },error=>this.messageService.add({severity:'error',summary:'Error',detail:'Invalid Login'}))
 
-}
-pass(){
-  this.modalService.logIn();
-  this.router.navigate(['/home']);
 }
 
 register(){
