@@ -6,7 +6,7 @@ export type User = {
 }
 
 export var DEFAULTUSER:User = {
-    userID:0,
+    userID:-1,
     email:'',
     password:'',
     roleID:0

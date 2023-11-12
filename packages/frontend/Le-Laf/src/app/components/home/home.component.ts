@@ -44,6 +44,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    //Use this event to display data from the event
+    console.log('action', action)
+    console.log(event)
   }
 }

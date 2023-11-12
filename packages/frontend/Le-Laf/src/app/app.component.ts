@@ -20,7 +20,7 @@ export class AppComponent {
       this.showBar = data;
     })
     let current_url = this.router.url
-    if(current_url == '' || current_url == '/register') {
+    if(current_url == '/' || current_url == '/register') {
       this.showBar = false;
     }
     else
