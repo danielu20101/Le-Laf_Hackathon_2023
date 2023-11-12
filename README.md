@@ -21,6 +21,41 @@ We developed a platform allowing local Bethlehem High School admins to select da
 
 ![Database Entity Relationship Diagram](https://github.com/danielu20101/Le-Laf_Hackathon_2023/assets/62815005/1f4122a0-4988-4e14-aadd-d9584ac0a9ea)
 
+## SetUp Instructions
+
+## Setup Instructions
+
+To get started with this project, please follow the instructions below:
+
+### Frontend Setup
+
+1. Clone the repository:
+git clone <REPOSITORY-URL>
+
+2. Change into the frontend directory:
+cd frontend
+
+3. Install npm dependencies:
+npm install
+
+4. Start the frontend service:
+npm run start
+
+### Backend Setup
+
+5. Change into the backend directory:
+cd backend
+
+6. Create a virtual environment:
+python3 -m venv env
+
+7. Activate the virtual environment:
+source env/bin/activate
+
+8. Start the backend service with uvicorn:
+uvicorn main:app --reload
+
+The frontend and backend should now be up and running.
 
 ## Tech Stack
 
