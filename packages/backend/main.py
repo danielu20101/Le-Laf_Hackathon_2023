@@ -4,7 +4,7 @@ from passlib.context import CryptContext
 import uuid #to generate random userID's
 from datetime import datetime, timedelta
 from db_rds import ENDPOINT, PORT, USER, PASSWORD, DBNAME
-from models import RegisterUserRequest, RequestEvent #import pydantic models for routes
+from models import RegisterUserRequest, RequestEvent, Student #import pydantic models for routes
 
 import pymysql
 
@@ -217,4 +217,30 @@ async def get_all_classes(day_code: int):
         return classes_list
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#TODO
+app.post('/acceptRequest')
+async def acceptRequest():
+    return True
+
+app.post('/denyRequest')
+async def denyRequest():
+    return True
+
+@app.post("/getAllStudents")
+async def get_all_students():
+    unassigned_students = []
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor(DictCursor) as cur:
+                sql_statement = """
+                SELECT user.userid, user.email FROM user
+                LEFT JOIN member ON user.userid = member.studentID
+                WHERE user.role = 0 AND member.classID IS NULL
+                """
+                cur.execute(sql_statement)
+                unassigned_students_records = cur.fetchall()
+                unassigned_students = [Student(**record) for record in unassigned_students_records]
+        return unassigned_students
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
