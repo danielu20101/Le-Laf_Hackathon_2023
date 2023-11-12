@@ -1,0 +1,25 @@
+<p-table [value]="members" [(selection)]="selectedMembers">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th>Member Id</th>
+            <th>Member Name</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-member>
+        <tr>
+            <td>
+            <p-tableCheckbox [value]="member"></p-tableCheckbox>
+            </td>
+            <td>{{ member.id }}</td>
+            <td>{{ member.name }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<div style="display: flex; justify-content: space-between;margin-top: 10px;">
+<p-button label="Cancel" (onClick)="close()"></p-button>
+<p-button label="Save" (onClick)="save()"></p-button>
+</div>

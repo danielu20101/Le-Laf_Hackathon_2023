@@ -1,0 +1,26 @@
+<h1>Requests</h1>
+<div style="margin-top: 10px;">
+    <p-table [value]="requests">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Request Id</th>
+                <th>Requestor Name</th>
+                <th>Time</th>
+                <th>Day</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-request>
+            <tr>
+                <td>{{ request.id }}</td>
+                <td>{{ request.requestor }}</td>
+                <td>{{ request.time }}</td>
+                <td>{{ request.day }}</td>
+                <td><p-button icon="pi pi-check" styleClass="p-button-rounded p-button-success p-button-text" ></p-button></td>
+                <td><p-button icon="pi pi-times" styleClass="p-button-rounded p-button-danger p-button-text"></p-button></td>
+            </tr>
+        </ng-template>
+    
+    </p-table>
+</div>
