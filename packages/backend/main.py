@@ -5,9 +5,7 @@ from passlib.context import CryptContext
 import uuid #to generate random userID's
 from datetime import datetime, timedelta
 from db_rds import ENDPOINT, PORT, USER, PASSWORD, DBNAME
-from models import RegisterUserRequest, RequestEvent, Student #import pydantic models for routes
-
-
+from models import RegisterUserRequest, RequestEvent, Student, AcceptEvent #import pydantic models for routes
 import pymysql
 
 
@@ -134,6 +132,112 @@ async def getClass(profID):
         raise HTTPException(status_code=500, detail=str(e))
     #day values 0-4 correspond to M-F; start and end times in format hh:mm:ss
     return {"classID": classID, "day": dayCode, "startTime": startTime, "endTime": endTime, "studentInfo":studentInfo}
+
+@app.get("/getRequest")
+async def getRequest(classID):
+    s1 = str(classID)
+    try:
+        conn = get_db_connection()
+        with conn:
+            with conn.cursor() as cur:
+                sql = """SELECT * FROM eventRequest WHERE classID='""" + s1 + """'"""
+                cur.execute(sql)
+                sqlReq = cur.fetchall()
+                requests=[]
+                for r in sqlReq:
+                    classCode = r[0]
+                    hsAdminID = r[1]
+                    month = r[2]
+                    day = r[3]
+                    year = r[4]
+                    tpl = (classCode,hsAdminID,month,day,year)
+                    requests.append(tpl)
+    except Exception as e:
+        if conn.open:
+            conn.rollback()
+            conn.close()
+        print("Error has occurred: ", e)
+        raise HTTPException(status_code=500, detail=str(e))
+    return requests
+
+@app.post("/acceptRequest")
+async def acceptRequest(accept_event: AcceptEvent):
+     #insert this row into the confirmedEvent table, delete all records where classID=reqrequest.classID and hsAdminID=reqrequest.hsAdminID
+    accepted_event = {
+        "classID": accept_event.classID,
+        "hsAdminID": accept_event.hsAdminID,
+        "month": accept_event.month,
+        "day": accept_event.day,
+        "year": accept_event.year
+    }
+
+    try:
+        conn = get_db_connection()
+        with conn:
+            with conn.cursor() as cur:
+                sql = "INSERT INTO confirmedEvent(classID, hsAdminID, month, day, year) VALUES (%(classID)s, %(hsAdminID)s, %(month)s, %(day)s, %(year)s)"
+                cur.execute(sql, accepted_event)
+                #inserted, test delete
+                s1 = str(accept_event.classID)
+                s2 = str(accept_event.day)
+                s3 = str(accept_event.month)
+                s4 = str(accept_event.year)
+                delsql = "DELETE FROM eventRequest WHERE classID='" + s1 + "' AND month='" + s2 + "' AND day='" + s3 + "' AND year='" + s4 + "'" 
+                cur.execute(delsql)
+    except Exception as e:
+        if conn.open:
+            conn.rollback()
+            conn.close()
+        print("Error has occurred: ", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/getConfirmed")
+async def getConfirmed(userID):
+    #getconfirmed
+    #query user based on userid, look at role
+    s1 = str(userID)
+    try:
+        conn = get_db_connection()
+        with conn:
+            with conn.cursor() as cur:
+                sql = """SELECT role FROM user WHERE userID='""" + s1 + """'"""
+                cur.execute(sql)
+                temp = cur.fetchone()
+                var = temp
+                if var == 0:
+                    #student
+                    sql = """SELECT classID FROM member WHERE studentID='""" + s1 + """'"""
+                elif var == 1:
+                    #college admin
+                    sql = """SELECT classID FROM class WHERE profID='""" + s1 + """'"""
+                else:
+                    #hsadmin
+                    sql = """SELECT classID FROM confirmedEvent WHERE hsAdminID='""" + s1 + """'"""
+                cur.execute(sql)
+                one = cur.fetchone()
+                clid = one 
+                s2 = str(clid)
+                sql = """SELECT * FROM confirmedEvent WHERE classID='""" + s2 + """'"""
+                set = cur.fetchall()
+                confirmed=[]
+                for r in set:
+                    classCode = r[0]
+                    hsAdminID = r[1]
+                    month = r[2]
+                    day = r[3]
+                    year = r[4]
+                    tpl = (classCode,hsAdminID,month,day,year)
+                    confirmed.append(tpl)
+    except Exception as e:
+        if conn.open:
+            conn.rollback()
+            conn.close()
+        print("Error has occurred: ", e)
+        raise HTTPException(status_code=500, detail=str(e))
+    return confirmed
+    
+
+    
 
 #@app.post("/loginHSAdmin")
 #async def loginHSAdmin():

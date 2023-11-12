@@ -16,3 +16,9 @@ class RequestEvent(BaseModel):
 class Student(BaseModel):
     userid: int
     email: str
+class AcceptEvent(BaseModel):
+    classID: int
+    day: int
+    month: int
+    year: int
+    hsAdminID: int

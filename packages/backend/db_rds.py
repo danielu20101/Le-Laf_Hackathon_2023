@@ -114,10 +114,24 @@ for arg in sys.argv:
             for rows in csv_reader:
                 dict_list.append({'userID':rows[0], 'email':rows[1], 'pass':rows[2], 'role': rows[3]})
         
+    #new_calendar_event = {
+    #     "classID": 2,
+    #    "hsAdminID": 703,
+    #    "day": 12,
+    #    "month": 12,
+    #    "year": 2023
+    #}
+    
+
+#sql_request_statement = """INSERT INTO confirmedEvent (classID, hsAdminID, month, day, year)
+#                                           VALUES (%(classID)s, %(hsAdminID)s, %(month)s, %(day)s, %(year)s)"""
+
+#cur.execute(sql_request_statement,new_calendar_event)
+
 conn.commit()
-str = """SELECT userID FROM user"""
-cur.execute(str)
-test = cur.fetchall()
-print(test)
+#str = """SELECT * FROM confirmedEvent"""
+#cur.execute(str)
+#test = cur.fetchall()
+#print(test)
 
 #define routes
