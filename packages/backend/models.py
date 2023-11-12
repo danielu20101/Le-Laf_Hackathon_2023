@@ -12,3 +12,7 @@ class RequestEvent(BaseModel):
     day: int
     month: int
     year: int
+
+class Student(BaseModel):
+    userid: int
+    email: str
