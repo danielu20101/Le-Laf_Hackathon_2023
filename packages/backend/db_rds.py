@@ -2,8 +2,6 @@ import pymysql
 import sys
 import boto3
 import os
-import pathlib
-import csv
 
 ENDPOINT="database-3.cbuiroxadssw.us-east-1.rds.amazonaws.com"
 PORT=3306
@@ -60,65 +58,8 @@ for arg in sys.argv:
         dropUser = """DROP TABLE user"""
         cur.execute(dropUser)
         #all tables dropped
-        #chsange the csv paths
-    elif arg == "-z":
-        #insert users
-        csv_path = pathlib.Path.cwd() / "./staticCSV/user.csv"
-        dict_list = list()
-        with csv_path.open(mode="r") as csv_reader:
-            csv_reader = csv.reader(csv_reader)
-            for rows in csv_reader:
-                dict_list.append({'userID':rows[0], 'email':rows[1], 'pass':rows[2], 'role': rows[3]})
-        for item in dict_list:
-            sql = "INSERT INTO user(userID, email, pass, role) VALUES (%s, %s, %s, %s)"
-            val = item['userID'], item['email'], item['pass'], item['role']
-            cur.execute(sql, val)
-    elif arg == "-b":
-        #insert classes 
-        csv_path = pathlib.Path.cwd() / "./staticCSV/class.csv"
-        dict_list = list()
-        with csv_path.open(mode="r") as csv_reader:
-            csv_reader = csv.reader(csv_reader)
-            for rows in csv_reader:
-                dict_list.append({'profID':rows[0], 'dayCode':rows[1], 'startTime':rows[2], 'endTime': rows[3]})
-        for item in dict_list:
-            sql = "INSERT INTO class(profID, dayCode, startTime, endTime) VALUES (%s, %s, %s, %s)"
-            val = item['profID'], item['dayCode'], item['startTime'], item['endTime']
-            cur.execute(sql, val)
-    elif arg == "-m":
-        #insert members
-        csv_path = pathlib.Path.cwd() / "./staticCSV/member.csv"
-        dict_list = list()
-        with csv_path.open(mode="r") as csv_reader:
-            csv_reader = csv.reader(csv_reader)
-            for rows in csv_reader:
-                dict_list.append({'classID':rows[0], 'studentID':rows[1]})
-        for item in dict_list:
-            sql = "INSERT INTO member(classID, studentID) VALUES (%s, %s)"
-            val = item['classID'], item['studentID']
-            cur.execute(sql, val)
-    elif arg == "-e":
-        #insert eventRequests
-        csv_path = pathlib.Path.cwd() / "data.csv"
-        dict_list = list()
-        with csv_path.open(mode="r") as csv_reader:
-            csv_reader = csv.reader(csv_reader)
-            for rows in csv_reader:
-                dict_list.append({'userID':rows[0], 'email':rows[1], 'pass':rows[2], 'role': rows[3]})
-    elif arg == "-k":
-        #insert confirmed events
-        csv_path = pathlib.Path.cwd() / "data.csv"
-        dict_list = list()
-        with csv_path.open(mode="r") as csv_reader:
-            csv_reader = csv.reader(csv_reader)
-            for rows in csv_reader:
-                dict_list.append({'userID':rows[0], 'email':rows[1], 'pass':rows[2], 'role': rows[3]})
-        
-conn.commit()
-str = """SELECT userID FROM user"""
-cur.execute(str)
-test = cur.fetchall()
-print(test)
+
+
 
 #define routes
     

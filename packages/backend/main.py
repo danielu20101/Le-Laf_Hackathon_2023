@@ -71,8 +71,7 @@ async def getUser(email, password):
     #print(query_results)
     #email = get_user_request.email
     #password = get_user_request.password
-    hashed_password = pwd_context.hash(password)
-    queryUser = """SELECT userID, role FROM user WHERE email='""" + email + """' AND pass='""" + hashed_password + """'""" 
+    queryUser = """SELECT userID, role FROM user WHERE email='""" + email + """' AND pass='""" + password + """'""" 
 
     try:
         conn = get_db_connection()
@@ -91,40 +90,6 @@ async def getUser(email, password):
 
     return {"userID": userID, "role": role}
 
-@app.get("/getClass")
-async def getClass(profID):
-    #return the class members (list) and the time (date, 0-4, and start/end time)
-    s = str(profID)
-    queryClass = """SELECT classID, dayCode, startTime, endTime FROM class WHERE profID='""" + s + """'"""
-
-    try:
-        conn = get_db_connection()
-        with conn:
-            with conn.cursor() as cur:
-                cur.execute(queryClass)
-                row = cur.fetchone()
-                classID = row[0]
-                dayCode = row[1] #0-4 int
-                startTime = row[2] #hh:mm:ss
-                endTime = row[3] #hh:mm:ss
-                s1 = str(classID)
-                queryMembers = """SELECT studentID, email FROM user JOIN member ON user.userID=member.studentID WHERE classID='""" + s1 + """'""" 
-                cur.execute(queryMembers)
-                set = cur.fetchall() #set of all studentids for that class
-                studentInfo=[[]]
-                #studentIDs=[]
-                for student in set:
-                    #cur.execute(queryEmail)
-                    pair = (set[0], set[1])
-                    studentInfo.append(pair)
-    except Exception as e:
-        if conn.open:
-            conn.rollback()
-            conn.close()
-        print("Error has occurred: ", e)
-        raise HTTPException(status_code=500, detail=str(e))
-    #day values 0-4 correspond to M-F; start and end times in format hh:mm:ss
-    return {"classID": classID, "day": dayCode, "startTime": startTime, "endTime": endTime, "studentInfo":studentInfo}
 
 #@app.post("/loginHSAdmin")
 #async def loginHSAdmin():
