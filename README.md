@@ -13,4 +13,8 @@ Purpose: Multiple high schools in the Bethlehem community suffer from low gradua
 
 Approach: We developed a platform allowing local Bethlehem High School admins to select days on calendars, and invite students to participate in 1:1 mentoring/advisory sessions with college students. High school admins submit a request that stays pending until a College Admin chooses to approve or deny a request. When multiple high school admins select requests that fall on the same time slot, the request that the college Admin approves gets scheduled across both calendars, and all other requests get rejected so High school admins can reselect another time slot.  
 
+DatabaseERD:
+<img width="567" alt="Screen Shot 2023-11-12 at 10 27 18 AM" src="https://github.com/danielu20101/Le-Laf_Hackathon_2023/assets/62815005/1f4122a0-4988-4e14-aadd-d9584ac0a9ea">
+![IMG_1204HACKATHON](https://github.com/danielu20101/Le-Laf_Hackathon_2023/assets/62815005/33ebba7a-e702-404a-88c8-e74056e123db)
+
 Tech Stack: Fast API, Angular.js, Typescript, Javascript
