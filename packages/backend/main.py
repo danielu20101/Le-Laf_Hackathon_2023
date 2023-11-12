@@ -163,30 +163,30 @@ def authenticate_user(email, password):
 
 @app.post("/requestEvent")
 async def request_event(request_event: RequestEvent):
-    user = authenticate_user(request_event.email, request_event.password) #method to determine correct user
-    if not user:
-        raise HTTPException(status_code=405, detail="user does not exist")
+    # user = authenticate_user(request_event.email, request_event.password) #method to determine correct user
+    # if not user:
+    #     raise HTTPException(status_code=405, detail="user does not exist")
 
-    if user['role'] != 2:
-        raise HTTPException(status_code=404, detail="person is not the right role")
+    # if user['role'] != 2:
+    #     raise HTTPException(status_code=404, detail="person is not the right role")
 
-    class_id = 2 #HARD CODED for now
+    # class_id = 2 #HARD CODED for now
 
-    if not class_id:
-        raise HTTPException(status_code=404, detail="Class not found for this admin")
+    # if not class_id:
+    #     raise HTTPException(status_code=404, detail="Class not found for this admin")
 
     new_calendar_event = {
-        "classID": class_id,
-        "hsAdminID": user['userid'],
+        "classID": request_event.classID,
+        "hsAdminID": request_event.hsAdminID,
         "Day": request_event.day,
         "Month": request_event.month,
         "Year": request_event.year
     }
-
+    print(new_calendar_event)
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
-                sql_request_statement = """INSERT INTO EventRequest (classID, hsAdminID, Day, Month, Year)
+                sql_request_statement = """INSERT INTO eventRequest (classID, hsAdminID, Day, Month, Year)
                                            VALUES (%(classID)s, %(hsAdminID)s, %(Day)s, %(Month)s, %(Year)s)"""
                 cur.execute(sql_request_statement, new_calendar_event)
                 conn.commit()
