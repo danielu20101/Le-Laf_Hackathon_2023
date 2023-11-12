@@ -4,16 +4,13 @@ from passlib.context import CryptContext
 import uuid #to generate random userID's
 
 from db_rds import ENDPOINT, PORT, USER, PASSWORD, DBNAME
-from models import RegisterUserRequest #our model to register a user
+from models import RegisterUserRequest, GetUserRequest #import pydantic models for routes
 
 import pymysql
 
 
-conn =  pymysql.connect(host=ENDPOINT, user=USER, passwd=PASSWORD, port=PORT, database=DBNAME, ssl_ca='./../../us-east-1-bundle.pem')
-cur = conn.cursor()
-
-
-
+#conn =  pymysql.connect(host=ENDPOINT, user=USER, passwd=PASSWORD, port=PORT, database=DBNAME, ssl_ca='./../../us-east-1-bundle.pem')
+#cur = conn.cursor()
 
 app = FastAPI()
 
@@ -66,6 +63,31 @@ async def register_user(register_request: RegisterUserRequest):
 
     return {"userID": user_id, "message": "User registered successfully"}
 
+@app.get("/getUser")
+async def getUser(email, password):
+    #async def getUser(get_user_request: GetUserRequest):
+    #return the userID and role 
+    #print(query_results)
+    #email = get_user_request.email
+    #password = get_user_request.password
+    queryUser = """SELECT userID, role FROM user WHERE email='""" + email + """' AND pass='""" + password + """'""" 
+
+    try:
+        conn = get_db_connection()
+        with conn:
+            with conn.cursor() as cur:
+                cur.execute(queryUser)
+                row = cur.fetchone()
+                userID = row[0]
+                role = row[1]
+    except Exception as e:
+        if conn.open:
+            conn.rollback()
+            conn.close()
+        print("Error has occurred: ", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return {"userID": userID, "role": role}
 
 #@app.post("/loginHSAdmin")
 #async def loginHSAdmin():
