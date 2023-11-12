@@ -1,10 +1,12 @@
 from fastapi import FastAPI, Depends, Request, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pymysql.cursors import DictCursor
 from passlib.context import CryptContext
 import uuid #to generate random userID's
 from datetime import datetime, timedelta
 from db_rds import ENDPOINT, PORT, USER, PASSWORD, DBNAME
 from models import RegisterUserRequest, RequestEvent, Student #import pydantic models for routes
+
 
 import pymysql
 
@@ -13,6 +15,14 @@ import pymysql
 #cur = conn.cursor()
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
@@ -43,7 +53,7 @@ async def register_user(register_request: RegisterUserRequest):
     new_user = {
         "userid": user_id,
         "email": register_request.email,
-        "pass": hashed_password,
+        "pass": register_request.password,
         "role": register_request.role
     }
 
@@ -110,11 +120,11 @@ async def getClass(profID):
                 queryMembers = """SELECT studentID, email FROM user JOIN member ON user.userID=member.studentID WHERE classID='""" + s1 + """'""" 
                 cur.execute(queryMembers)
                 set = cur.fetchall() #set of all studentids for that class
-                studentInfo=[[]]
+                studentInfo=[]
                 #studentIDs=[]
                 for student in set:
                     #cur.execute(queryEmail)
-                    pair = (set[0], set[1])
+                    pair = (student[0], student[1])
                     studentInfo.append(pair)
     except Exception as e:
         if conn.open:
@@ -203,7 +213,7 @@ async def get_all_classes(day_code: int):
     while first_class_day.month == first_day_next_month.month:
         class_dates.append(first_class_day)
         first_class_day += timedelta(days=7)
-
+    print(class_dates)
     classes_list = []
     try:
         with get_db_connection() as conn:
@@ -213,6 +223,10 @@ async def get_all_classes(day_code: int):
                                        WHERE DayCode = %s""" 
                     cur.execute(sql_statement, (day_code,))
                     classes = cur.fetchall()
+                    for class_meeting in classes:
+                        class_meeting['month'] = class_date.month-1
+                        class_meeting['day'] = class_date.day
+                        class_meeting['year'] = class_date.year
                     classes_list.extend(classes)
         return classes_list
     except Exception as e:
@@ -227,7 +241,7 @@ app.post('/denyRequest')
 async def denyRequest():
     return True
 
-@app.post("/getAllStudents")
+@app.get("/getAllStudents")
 async def get_all_students():
     unassigned_students = []
     try:

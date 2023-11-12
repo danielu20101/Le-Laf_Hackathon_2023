@@ -7,8 +7,8 @@ class RegisterUserRequest(BaseModel):
     role: conint(ge=0, le=2)
 
 class RequestEvent(BaseModel):
-    email: str
-    password: str
+    classID: str
+    hsAdminID: str
     day: int
     month: int
     year: int
