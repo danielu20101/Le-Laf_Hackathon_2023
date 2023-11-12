@@ -21,7 +21,6 @@ We developed a platform allowing local Bethlehem High School admins to select da
 
 ![Database Entity Relationship Diagram](https://github.com/danielu20101/Le-Laf_Hackathon_2023/assets/62815005/1f4122a0-4988-4e14-aadd-d9584ac0a9ea)
 
-*Note: Replace the above placeholder link with the actual URL where your ERD image is hosted.*
 
 ## Tech Stack
 
