@@ -4,6 +4,7 @@ import { DEFAULTUSER, User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ClassGroup, DEFAULTCLASS } from '../models/class.model';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -51,12 +52,10 @@ export class UserService {
     );
   }
 
-  setCurrnetUser(email:string, password:string){
-    this.http.get<User>(environment.url+"user").subscribe((data)=>{
-      this.currentUser = data;
-    },
-    error=>console.log(error)
-    )
+  setCurrentUser(email:string, password:string){
+     const options = email ? { params: new HttpParams().set('email', email).append('password',password) } : {};
+    return this.http.get<User>(environment.url+"getUser",options)
+    
   }
 
   getCurrentUser(){
@@ -68,16 +67,13 @@ export class UserService {
   }
 
   registerUser(email:string, password:string, roleID:number){
-    this.http
+    return this.http
       .post(environment.url + 'user', {
-        email: email,
-        password: password,
-        role: roleID,
+        'email': email,
+        'password': password,
+        'role': roleID,
       })
-      .subscribe(
-        () => {},
-        (error) => console.log(error)
-      );
+      
   }
 
 }

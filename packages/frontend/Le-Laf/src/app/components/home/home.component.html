@@ -1,4 +1,4 @@
 <h1>Home</h1>
 <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [refresh]="refresh" (dayClicked)="dayClicked($event.day)"
-    [activeDayIsOpen]="activeDayIsOpen">
+    [activeDayIsOpen]="activeDayIsOpen" (eventClicked)="handleEvent('Clicked', $event.event)">
 </mwl-calendar-month-view>

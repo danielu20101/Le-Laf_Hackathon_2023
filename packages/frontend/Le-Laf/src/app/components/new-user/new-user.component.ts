@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { ModalService } from 'src/app/services/modal.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-new-user',
@@ -11,21 +13,42 @@ export class NewUserComponent {
   email:string="";
   password:string="";
 
-  selectedRole:string="";
-  roles = [
-    {name:'College Admin'},
-    {name:'College Student'},
-    {name:'High School Admin'}
+  selectedRole:{name:string,id:number}|undefined=undefined;
+  roles:{name:string,id:number}[] = [
+    {name:'College Student',id:0},
+    {name:'College Admin',id:1},
+    {name:'High School Admin',id:2}
   ]
 
 
 
-  constructor(public modalService:ModalService, public router:Router){}
+  constructor(public modalService:ModalService, public router:Router, public userService:UserService,public messageService:MessageService){}
 
   login() {
         ///Create User
-    this.modalService.logIn()
-    this.router.navigate(['/home'])
+    if (this.selectedRole == undefined){
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please Select a Role',
+      });
+      return;
+    }
+    
+    this.userService
+      .registerUser(this.email, this.password, this.selectedRole.id)
+      .subscribe(
+        () => {
+          this.modalService.logIn();
+          this.router.navigate(['/home']);
+        },
+        (error) =>
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Invalid Credentials',
+          })
+      );
   }
 
   back() {

@@ -23,6 +23,9 @@ import { FormsModule } from '@angular/forms';
 import { NewUserComponent } from './components/new-user/new-user.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { HttpClientModule } from '@angular/common/http';
+import { ToastModule } from 'primeng/toast';
+import { MessagesModule } from 'primeng/messages';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, LoginComponent, ClassComponent, RequestComponent, AcceptComponent, MenuComponent, RegisterComponent, NewUserComponent],
@@ -43,8 +46,10 @@ import { HttpClientModule } from '@angular/common/http';
     DialogModule,
     InputTextModule,
     DropdownModule,
+    ToastModule,
+    MessagesModule,
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
