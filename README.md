@@ -1,5 +1,7 @@
 # Le-Laf_Hackathon_2023 - LVAIC_CONNECTS
 
+<img width="655" alt="Screen Shot 2023-11-12 at 10 55 12 AM" src="https://github.com/danielu20101/Le-Laf_Hackathon_2023/assets/62815005/b2952985-9d3e-4c3a-a4c0-533c0bde103f">
+
 ## Team Members
 
 - **Paolo Bartolucci**
@@ -8,6 +10,7 @@
   - Senior CSE Major
 - **Joe Bereswill**
   - Senior CSB Major
+
 
 ## Purpose
 
